@@ -10,7 +10,10 @@ public with sharing class Utils {
     public static Map<Object, Sobject> getMapUniqueByCustomField(List<Sobject> records, String fieldName){
         Map<Object, Sobject> response = new Map<Object, Sobject>();
         for(Sobject sobj: records){
-            response.put(sobj.get(fieldName), sobj);
+            Object key = sobj.get(fieldName);
+            if(key != null){
+                response.put(key, sobj);
+            }
         }
         
         return response;
@@ -27,9 +30,11 @@ public with sharing class Utils {
         Map<Object, List<Sobject>> response = new Map<Object, List<Sobject>>();
         for(Sobject sobj: records){
             Object key = sobj.get(fieldName);
-            List<Sobject> sobjs = response.containskey(key)? response.get(key) : new List<Sobject>();
-            sobjs.add(sobj);
-            response.put(key, sobjs);
+            if(key != null){
+                List<Sobject> sobjs = response.containskey(key)? response.get(key) : new List<Sobject>();
+                sobjs.add(sobj);
+                response.put(key, sobjs);
+            }
         }
         
         return response;
